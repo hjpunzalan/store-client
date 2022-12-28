@@ -1,16 +1,6 @@
 import { useEffect, useState } from "react";
 import { storeAPI } from "./helpers/axios";
-
-interface Product {
-	id: number;
-	brand: string;
-	description: string;
-	name: string;
-	pictureUrl: string;
-	price: number;
-	quantityInStock: number;
-	type: string;
-}
+import { Product } from "./types/product";
 
 function App() {
 	const [products, setProducts] = useState<Product[] | undefined>();
@@ -27,7 +17,9 @@ function App() {
 			{products && (
 				<ul>
 					{products.map((p) => (
-						<li>{p.name}</li>
+						<li key={p.id}>
+							{p.name} - {p.price}
+						</li>
 					))}
 				</ul>
 			)}
