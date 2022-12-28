@@ -1,7 +1,8 @@
-import { Typography } from "@mui/material";
+import { Container, CssBaseline } from "@mui/material";
 import { SetStateAction, useEffect, useState } from "react";
 import Catalog from "src/features/catalog/Catalog";
 import { storeAPI } from "src/helpers/axios";
+import Header from "./Header";
 import { Product } from "./models/product";
 
 function App() {
@@ -16,10 +17,11 @@ function App() {
 	}, []);
 
 	return (
-		<main>
-			<Typography variant="h1">Store App</Typography>
-			{products && <Catalog products={products} />}
-		</main>
+		<>
+			<CssBaseline />
+			<Header />
+			<Container>{products && <Catalog products={products} />}</Container>
+		</>
 	);
 }
 
