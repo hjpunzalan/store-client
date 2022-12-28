@@ -4,7 +4,7 @@ type Props = {};
 
 const Header = (props: Props) => {
 	return (
-		<AppBar position="static">
+		<AppBar position="static" sx={{ mb: (theme) => theme.spacing(4) }}>
 			<Toolbar>
 				<Typography variant="h6">Store app</Typography>
 			</Toolbar>
