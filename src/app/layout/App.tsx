@@ -1,3 +1,4 @@
+import { Typography } from "@mui/material";
 import { SetStateAction, useEffect, useState } from "react";
 import Catalog from "src/features/catalog/Catalog";
 import { storeAPI } from "src/helpers/axios";
@@ -16,7 +17,7 @@ function App() {
 
 	return (
 		<main>
-			<h1>Store App</h1>
+			<Typography variant="h1">Store App</Typography>
 			{products && <Catalog products={products} />}
 		</main>
 	);
