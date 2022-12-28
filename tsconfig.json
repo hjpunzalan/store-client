@@ -17,9 +17,11 @@
 		"jsx": "react-jsx",
 		"baseUrl": ".",
 		"paths": {
-			"@constants/*": ["constants/*"],
-			"@helpers/*": ["helpers/*"]
+			"@constants/*": ["/src/constants/*"],
+			"@helpers/*": ["/src/helpers/*"],
+			"@features/*": ["/src/features/*"]
 		}
 	},
-	"include": ["src"]
+	"include": ["src"],
+	"extends": "./tsconfig.path.json"
 }
