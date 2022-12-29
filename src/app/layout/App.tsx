@@ -4,7 +4,7 @@ import {
 	ThemeProvider,
 	createTheme,
 } from "@mui/material";
-import { Route } from "react-router-dom";
+import { Route, Switch } from "react-router-dom";
 import AboutPage from "src/features/about/AboutPage";
 import Catalog from "src/features/catalog/Catalog";
 import ProductDetails from "src/features/catalog/ProductDetails";
@@ -25,13 +25,15 @@ function App() {
 	return (
 		<ThemeProvider theme={theme}>
 			<CssBaseline />
-			<Header toggleDarkMode={toggleDarkMode} />
+			<Header darkMode={darkMode} toggleDarkMode={toggleDarkMode} />
 			<Container>
-				<Route path="/" component={HomePage} />
-				<Route path="/catalog" component={Catalog} />
-				<Route path="/catalog/:id" component={ProductDetails} />
-				<Route path="/about" component={AboutPage} />
-				<Route path="/contact" component={ContactPage} />
+				<Switch>
+					<Route exact path="/" component={HomePage} />
+					<Route path="/catalog" component={Catalog} />
+					<Route path="/catalog/:id" component={ProductDetails} />
+					<Route path="/about" component={AboutPage} />
+					<Route path="/contact" component={ContactPage} />
+				</Switch>
 			</Container>
 		</ThemeProvider>
 	);
