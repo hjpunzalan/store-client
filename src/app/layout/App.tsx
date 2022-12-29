@@ -4,7 +4,12 @@ import {
 	ThemeProvider,
 	createTheme,
 } from "@mui/material";
+import { Route } from "react-router-dom";
+import AboutPage from "src/features/about/AboutPage";
 import Catalog from "src/features/catalog/Catalog";
+import ProductDetails from "src/features/catalog/ProductDetails";
+import ContactPage from "src/features/contact/ContactPage";
+import HomePage from "src/features/home/HomePage";
 import { useToggle } from "src/hooks/useToggle";
 import Header from "./Header";
 
@@ -22,7 +27,11 @@ function App() {
 			<CssBaseline />
 			<Header toggleDarkMode={toggleDarkMode} />
 			<Container>
-				<Catalog />
+				<Route path="/" component={HomePage} />
+				<Route path="/catalog" component={Catalog} />
+				<Route path="/catalog/:id" component={ProductDetails} />
+				<Route path="/about" component={AboutPage} />
+				<Route path="/contact" component={ContactPage} />
 			</Container>
 		</ThemeProvider>
 	);
