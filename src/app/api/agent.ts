@@ -1,7 +1,33 @@
-import { AxiosResponse } from "axios";
+import { AxiosError, AxiosResponse } from "axios";
+import { toast } from "react-toastify";
 import { storeAPI } from "./../../helpers/axios";
 
 const responseBody = (response: AxiosResponse) => response.data;
+
+storeAPI.interceptors.response.use(
+	(response) => {
+		return response;
+	},
+	(error: AxiosError<any>) => {
+		if (error.response) {
+			const { data, status } = error.response!;
+			if ((data as any).errors && status === 400) {
+				const modelStateErrors: string[] = [];
+				for (const key in data.errors) {
+					if (data.errors[key]) {
+						modelStateErrors.push(data.errors[key]);
+					}
+				}
+
+				throw modelStateErrors.flat();
+			}
+			toast(`${status} - ${(data as any).title}`, {
+				type: "error",
+			});
+		}
+		return Promise.reject(error.response);
+	}
+);
 
 const requests = {
 	get: (url: string) => storeAPI.get(url).then(responseBody),
@@ -16,11 +42,18 @@ const Catalog = {
 };
 
 const TestErrors = {
-	get400Error: () => requests.get("/Buggy/bad-request"),
-	get401Error: () => requests.get("/Buggy/unauthorised"),
-	get404Error: () => requests.get("/Buggy/not-found"),
-	get500Error: () => requests.get("/Buggy/server-error"),
-	getValidationError: () => requests.get("/Buggy/validation-error"),
+	get400Error: () =>
+		requests.get("/Buggy/bad-request").catch((err) => console.log(err)),
+	get401Error: () =>
+		requests.get("/Buggy/unauthorised").catch((err) => console.log(err)),
+	get404Error: () =>
+		requests.get("/Buggy/not-found").catch((err) => console.log(err)),
+	get500Error: () =>
+		requests.get("/Buggy/server-error").catch((err) => console.log(err)),
+	getValidationError: () =>
+		requests.get("/Buggy/validation-error").catch((err) => {
+			throw err;
+		}),
 };
 
 const agent = {

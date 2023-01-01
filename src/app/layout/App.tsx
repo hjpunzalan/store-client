@@ -5,6 +5,8 @@ import {
 	createTheme,
 } from "@mui/material";
 import { Route, Switch } from "react-router-dom";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import AboutPage from "src/features/about/AboutPage";
 import Catalog from "src/features/catalog/Catalog";
 import ProductDetails from "src/features/catalog/ProductDetails";
@@ -20,10 +22,14 @@ function App() {
 	const theme = createTheme({
 		palette: {
 			mode: paletteType,
+			background: {
+				default: paletteType === "light" ? "#eaeaeaea" : "#121212",
+			},
 		},
 	});
 	return (
 		<ThemeProvider theme={theme}>
+			<ToastContainer theme="colored" position="bottom-right" hideProgressBar />
 			<CssBaseline />
 			<Header darkMode={darkMode} toggleDarkMode={toggleDarkMode} />
 			<Container>
