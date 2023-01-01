@@ -1,5 +1,6 @@
 import { AxiosError, AxiosResponse } from "axios";
 import { toast } from "react-toastify";
+import { history } from "src";
 import { storeAPI } from "./../../helpers/axios";
 
 const responseBody = (response: AxiosResponse) => response.data;
@@ -24,6 +25,15 @@ storeAPI.interceptors.response.use(
 			toast(`${status} - ${(data as any).title}`, {
 				type: "error",
 			});
+
+			if (status.toString().startsWith("5")) {
+				history.push({
+					pathname: "/server-error",
+					state: {
+						error: data,
+					},
+				});
+			}
 		}
 		return Promise.reject(error.response);
 	}
