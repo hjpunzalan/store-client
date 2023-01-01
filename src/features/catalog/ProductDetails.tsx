@@ -9,8 +9,8 @@ import {
 } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import agent from "src/app/api/agent";
 import { Product } from "src/app/layout/models/product";
-import { storeAPI } from "src/helpers/axios";
 
 interface Props {}
 
@@ -20,10 +20,9 @@ const ProductDetails = (props: Props) => {
 	const [loading, setLoading] = useState(true);
 
 	useEffect(() => {
-		storeAPI
-			.get<Product>(`/products/${id}`)
-			.then((res) => {
-				setProduct(res.data);
+		agent.Catalog.details(parseInt(id))
+			.then((data) => {
+				setProduct(data);
 			})
 			.catch((err) => console.error(err))
 			.finally(() => setLoading(false));
