@@ -5,8 +5,16 @@ import { storeAPI } from "./../../helpers/axios";
 
 const responseBody = (response: AxiosResponse) => response.data;
 
+const sleep = () =>
+	new Promise<void>((resolve) =>
+		setTimeout(() => {
+			return resolve();
+		}, 1000)
+	);
+
 storeAPI.interceptors.response.use(
-	(response) => {
+	async (response) => {
+		await sleep();
 		return response;
 	},
 	(error: AxiosError<any>) => {
