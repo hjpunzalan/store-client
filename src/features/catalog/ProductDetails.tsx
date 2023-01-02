@@ -10,6 +10,7 @@ import {
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import agent from "src/app/api/agent";
+import LoadingComponent from "src/app/layout/LoadingComponent";
 import { Product } from "src/app/layout/models/product";
 import NotFound from "src/errors/NotFound";
 
@@ -29,7 +30,7 @@ const ProductDetails = (props: Props) => {
 			.finally(() => setLoading(false));
 	}, [id]);
 
-	if (loading) return <h3>Loading...</h3>;
+	if (loading) return <LoadingComponent message="Loading product..." />;
 	if (!product) return <NotFound />;
 	return (
 		<Grid container spacing={6}>
