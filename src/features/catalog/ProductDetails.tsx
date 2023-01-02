@@ -11,6 +11,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import agent from "src/app/api/agent";
 import { Product } from "src/app/layout/models/product";
+import NotFound from "src/errors/NotFound";
 
 interface Props {}
 
@@ -29,7 +30,7 @@ const ProductDetails = (props: Props) => {
 	}, [id]);
 
 	if (loading) return <h3>Loading...</h3>;
-	if (!product) return <h3>Product not found!</h3>;
+	if (!product) return <NotFound />;
 	return (
 		<Grid container spacing={6}>
 			<Grid item xs={6}>

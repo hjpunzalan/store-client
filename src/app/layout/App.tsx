@@ -7,6 +7,7 @@ import {
 import { Route, Switch } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import NotFound from "src/errors/NotFound";
 import ServerError from "src/errors/ServerError";
 import AboutPage from "src/features/about/AboutPage";
 import Catalog from "src/features/catalog/Catalog";
@@ -41,6 +42,7 @@ function App() {
 					<Route path="/about" component={AboutPage} />
 					<Route path="/contact" component={ContactPage} />
 					<Route path="/server-error" component={ServerError} />
+					<Route component={NotFound} />
 				</Switch>
 			</Container>
 		</ThemeProvider>
