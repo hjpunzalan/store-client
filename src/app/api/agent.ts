@@ -1,9 +1,10 @@
 import { AxiosError, AxiosResponse } from "axios";
 import { toast } from "react-toastify";
 import { history } from "src";
+import { Basket as BasketType } from "../models/basket";
 import { storeAPI } from "./../../helpers/axios";
 
-const responseBody = (response: AxiosResponse) => response.data;
+const responseBody = <T = any>(response: AxiosResponse<T>) => response.data;
 
 const sleep = () =>
 	new Promise<void>((resolve) =>
@@ -49,7 +50,8 @@ storeAPI.interceptors.response.use(
 
 const requests = {
 	get: (url: string) => storeAPI.get(url).then(responseBody),
-	post: (url: string, body: {}) => storeAPI.post(url, body).then(responseBody),
+	post: <T>(url: string, body: {}) =>
+		storeAPI.post(url, body).then((res) => responseBody<T>(res)),
 	put: (url: string, body: {}) => storeAPI.put(url, body).then(responseBody),
 	delete: (url: string) => storeAPI.delete(url).then(responseBody),
 };
@@ -62,7 +64,10 @@ const Catalog = {
 const Basket = {
 	get: () => requests.get("/basket"),
 	addItem: (productId: number, quantity = 1) =>
-		requests.post(`/basket?productId=${productId}&quantity=${quantity}`, {}),
+		requests.post<BasketType>(
+			`/basket?productId=${productId}&quantity=${quantity}`,
+			{}
+		),
 	removeItem: (productId: number, quantity = 1) =>
 		requests.delete(`/basket?productId=${productId}&quantity=${quantity}`),
 };

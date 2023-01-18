@@ -10,22 +10,11 @@ import {
 	TableRow,
 	Typography,
 } from "@mui/material";
-import { useEffect, useState } from "react";
-import agent from "src/app/api/agent";
-import LoadingComponent from "src/app/layout/LoadingComponent";
-import { Basket } from "src/app/models/basket";
+import { useStoreContext } from "src/app/context/StoreContext";
 
 const BasketPage = () => {
-	const [loading, setLoading] = useState(true);
-	const [basket, setBasket] = useState<Basket | null>(null);
-	useEffect(() => {
-		agent.Basket.get()
-			.then((basket) => setBasket(basket))
-			.catch((err) => console.error(err))
-			.finally(() => setLoading(false));
-	}, []);
+	const { basket } = useStoreContext();
 
-	if (loading) return <LoadingComponent message="Loading basket...." />;
 	if (!basket)
 		return <Typography variant="h3"> Your basket is Empty</Typography>;
 	return (

@@ -13,6 +13,7 @@ import {
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import agent from "src/app/api/agent";
+import { useStoreContext } from "src/app/context/StoreContext";
 import { Product } from "src/app/layout/models/product";
 
 interface Props {
@@ -21,11 +22,13 @@ interface Props {
 
 const ProductCard = ({ product }: Props) => {
 	const [loading, setLoading] = useState(false);
+	const { setBasket } = useStoreContext();
 
 	const handleAddItem = async (productId: number) => {
 		try {
 			setLoading(true);
-			await agent.Basket.addItem(productId);
+			const basket = await agent.Basket.addItem(productId);
+			setBasket(basket);
 		} catch (err) {
 			console.error(err);
 		} finally {
@@ -73,8 +76,7 @@ const ProductCard = ({ product }: Props) => {
 				<LoadingButton
 					loading={loading}
 					size="small"
-					onClick={async () => await handleAddItem(product.id)}
-				>
+					onClick={async () => await handleAddItem(product.id)}>
 					Add to Cart
 				</LoadingButton>
 				<Button component={Link} to={`/catalog/${product.id}`} size="small">
