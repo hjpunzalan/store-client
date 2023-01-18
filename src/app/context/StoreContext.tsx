@@ -16,6 +16,8 @@ export const useStoreContext = () => {
 	if (context === undefined) {
 		throw Error("Ooops - we do not seem to be inside the provider");
 	}
+
+	return context;
 };
 
 export const StoreProvider = ({ children }: PropsWithChildren<any>) => {

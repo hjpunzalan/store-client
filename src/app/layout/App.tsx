@@ -4,6 +4,7 @@ import {
 	ThemeProvider,
 	createTheme,
 } from "@mui/material";
+import { useEffect, useState } from "react";
 import { Route, Switch } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -16,9 +17,26 @@ import ProductDetails from "src/features/catalog/ProductDetails";
 import ContactPage from "src/features/contact/ContactPage";
 import HomePage from "src/features/home/HomePage";
 import { useToggle } from "src/hooks/useToggle";
+import agent from "../api/agent";
+import { useStoreContext } from "../context/StoreContext";
+import { getCookie } from "../util/util";
 import Header from "./Header";
+import LoadingComponent from "./LoadingComponent";
 
 function App() {
+	const { setBasket } = useStoreContext();
+	const [loading, setLoading] = useState(true);
+
+	useEffect(() => {
+		const buyerId = getCookie("buyerId");
+		if (buyerId) {
+			agent.Basket.get()
+				.then((basket) => setBasket(basket))
+				.catch((err) => console.error(err))
+				.finally(() => setLoading(false));
+		}
+	}, [setBasket]);
+
 	const [darkMode, toggleDarkMode] = useToggle(false);
 	const paletteType = darkMode ? "dark" : "light";
 
@@ -30,6 +48,9 @@ function App() {
 			},
 		},
 	});
+
+	if (loading) return <LoadingComponent message="Initialising App..." />;
+
 	return (
 		<ThemeProvider theme={theme}>
 			<ToastContainer theme="colored" position="bottom-right" hideProgressBar />
