@@ -4,6 +4,7 @@ import ReactDOM from "react-dom/client";
 import { Router } from "react-router";
 import { BrowserRouter } from "react-router-dom";
 import "../src/app/layout/styles.css";
+import { StoreProvider } from "./app/context/StoreContext";
 import App from "./app/layout/App";
 import reportWebVitals from "./reportWebVitals";
 
@@ -16,9 +17,11 @@ export const history = createBrowserHistory();
 root.render(
 	<BrowserRouter>
 		<Router history={history}>
-			<React.StrictMode>
-				<App />
-			</React.StrictMode>
+			<StoreProvider>
+				<React.StrictMode>
+					<App />
+				</React.StrictMode>
+			</StoreProvider>
 		</Router>
 	</BrowserRouter>
 );
