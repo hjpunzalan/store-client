@@ -10,6 +10,7 @@ import "react-toastify/dist/ReactToastify.css";
 import NotFound from "src/errors/NotFound";
 import ServerError from "src/errors/ServerError";
 import AboutPage from "src/features/about/AboutPage";
+import BasketPage from "src/features/basket/BasketPage";
 import Catalog from "src/features/catalog/Catalog";
 import ProductDetails from "src/features/catalog/ProductDetails";
 import ContactPage from "src/features/contact/ContactPage";
@@ -42,6 +43,7 @@ function App() {
 					<Route path="/about" component={AboutPage} />
 					<Route path="/contact" component={ContactPage} />
 					<Route path="/server-error" component={ServerError} />
+					<Route path="/basket" component={BasketPage} />
 					<Route component={NotFound} />
 				</Switch>
 			</Container>

@@ -10,7 +10,7 @@ import {
 	Toolbar,
 	Typography,
 } from "@mui/material";
-import { NavLink } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 
 interface Props {
 	toggleDarkMode: () => void;
@@ -48,8 +48,7 @@ const Header = ({ toggleDarkMode }: Props) => {
 					display: "flex",
 					justifyContent: "space-between",
 					alignItems: "center",
-				}}
-			>
+				}}>
 				<Box sx={{ display: "flex", alignItems: "center" }}>
 					<Typography
 						component={NavLink}
@@ -60,8 +59,7 @@ const Header = ({ toggleDarkMode }: Props) => {
 							color: "inherit",
 							textDecoration: "none",
 							textTransform: "uppercase",
-						}}
-					>
+						}}>
 						Store app
 					</Typography>
 					<Switch onChange={toggleDarkMode} />
@@ -75,7 +73,11 @@ const Header = ({ toggleDarkMode }: Props) => {
 				</List>
 				<Box sx={{ display: "flex", alignItems: "center" }}>
 					<IconButton size="large" sx={{ color: "inherit" }}>
-						<Badge badgeContent={4} color="secondary">
+						<Badge
+							component={Link}
+							to="/basket"
+							badgeContent={4}
+							color="secondary">
 							<ShoppingCart />
 						</Badge>
 					</IconButton>
