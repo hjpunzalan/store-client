@@ -33,7 +33,7 @@ const ProductDetails = (props: Props) => {
 
 	const updateQuantity = useCallback(async () => {
 		if (!product) return;
-		const itemQuantity = item?.quantity || -0
+		const itemQuantity = item?.quantity || 0;
 		const diff = Math.abs(quantity - itemQuantity);
 
 		try {
