@@ -14,6 +14,7 @@ import {
 	Typography,
 } from "@mui/material";
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import agent from "src/app/api/agent";
 import { useStoreContext } from "src/app/context/StoreContext";
 import { priceFormat } from "src/app/util/util";
@@ -73,16 +74,24 @@ const BasketPage = () => {
 						{basket.items.map((item) => (
 							<TableRow
 								key={item.productId}
-								sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+								sx={{
+									textDecoration: "unset",
+									"&:last-child td, &:last-child th": { border: 0 },
+								}}
 							>
 								<TableCell component="th" scope="row">
-									<Box display="flex" alignItems="center">
+									<Box
+										display="flex"
+										alignItems="center"
+										component={Link}
+										to={`/catalog/${item.productId}`}
+									>
 										<img
 											src={item.pictureUrl}
 											alt={item.name}
 											style={{ height: 50, marginRight: 20 }}
 										/>
-										<span>{item.name}</span>
+										<span style={{ textDecoration: "none" }}>{item.name}</span>
 									</Box>
 								</TableCell>
 								<TableCell align="right">{priceFormat(item.price)}</TableCell>
