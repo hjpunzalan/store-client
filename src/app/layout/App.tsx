@@ -14,6 +14,7 @@ import AboutPage from "src/features/about/AboutPage";
 import BasketPage from "src/features/basket/BasketPage";
 import Catalog from "src/features/catalog/Catalog";
 import ProductDetails from "src/features/catalog/ProductDetails";
+import CheckoutPage from "src/features/checkout/CheckoutPage";
 import ContactPage from "src/features/contact/ContactPage";
 import HomePage from "src/features/home/HomePage";
 import { useToggle } from "src/hooks/useToggle";
@@ -67,6 +68,7 @@ function App() {
 					<Route path="/contact" component={ContactPage} />
 					<Route path="/server-error" component={ServerError} />
 					<Route path="/basket" component={BasketPage} />
+					<Route path="/checkout" component={CheckoutPage} />
 					<Route component={NotFound} />
 				</Switch>
 			</Container>

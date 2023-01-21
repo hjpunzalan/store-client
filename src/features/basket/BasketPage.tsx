@@ -2,6 +2,7 @@ import { Add, Delete, Remove } from "@mui/icons-material";
 import { LoadingButton } from "@mui/lab";
 import {
 	Box,
+	Button,
 	Grid,
 	Paper,
 	Stack,
@@ -152,8 +153,16 @@ const BasketPage = () => {
 			</TableContainer>
 			<Grid container>
 				<Grid item xs={6} />
-				<Grid item xs={6}>
+				<Grid item xs={6} display="flex" flexDirection="column" gap={2}>
 					<BasketSummary />
+					<Button
+						variant="contained"
+						size="large"
+						component={Link}
+						to="/checkout"
+					>
+						Checkout
+					</Button>
 				</Grid>
 			</Grid>
 		</Stack>
