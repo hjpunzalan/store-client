@@ -34,15 +34,19 @@ const BasketPage = () => {
 		}
 	};
 
-	const handleRemoveItem = async (productId: number, quantity = 1, name:string) => {
+	const handleRemoveItem = async (
+		productId: number,
+		quantity = 1,
+		name: string
+	) => {
 		try {
-		setStatus({ loading: true, name });
-			const b = await agent.Basket.removeItem(productId, quantity);
+			setStatus({ loading: true, name });
+			await agent.Basket.removeItem(productId, quantity);
 			removeItem(productId, quantity);
 		} catch (error) {
 			console.error(error);
 		} finally {
-		setStatus({ loading: false, name: "" });e);
+			setStatus({ loading: false, name: "" });
 		}
 	};
 
@@ -85,8 +89,16 @@ const BasketPage = () => {
 								</TableCell>
 								<TableCell align="center">
 									<LoadingButton
-										loading={status.loading && status.name === "remove" + item.productId}
-										onClick={() => handleRemoveItem(item.productId,1, item.productId + "rem")}
+										loading={
+											status.loading && status.name === "rem" + item.productId
+										}
+										onClick={() =>
+											handleRemoveItem(
+												item.productId,
+												1,
+												"rem" + item.productId
+											)
+										}
 										color="error"
 									>
 										<Remove />
@@ -94,8 +106,12 @@ const BasketPage = () => {
 
 									{item.quantity}
 									<LoadingButton
-											loading={status.loading && status.name === "add" + item.productId}
-										onClick={() => handleAddItem(item.productId, item.name)}
+										loading={
+											status.loading && status.name === "add" + item.productId
+										}
+										onClick={() =>
+											handleAddItem(item.productId, "add" + item.productId)
+										}
 										color="secondary"
 									>
 										<Add />
@@ -109,9 +125,15 @@ const BasketPage = () => {
 								</TableCell>
 								<TableCell>
 									<LoadingButton
-										loading={status.loading}
+										loading={
+											status.loading && status.name === "del" + item.productId
+										}
 										onClick={() =>
-											handleRemoveItem(item.productId, item.quantity, item.name)
+											handleRemoveItem(
+												item.productId,
+												item.quantity,
+												"del" + item.productId
+											)
 										}
 										color="error"
 									>
