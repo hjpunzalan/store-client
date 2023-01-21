@@ -126,7 +126,9 @@ const ProductDetails = (props: Props) => {
 						<LoadingButton
 							onClick={updateQuantity}
 							loading={submitting}
-							disabled={quantity === item?.quantity}
+							disabled={
+								quantity === item?.quantity || (!item && quantity === 0)
+							}
 							color="primary"
 							size="large"
 							variant="contained"
