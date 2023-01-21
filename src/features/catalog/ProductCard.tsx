@@ -15,6 +15,7 @@ import { Link } from "react-router-dom";
 import agent from "src/app/api/agent";
 import { useStoreContext } from "src/app/context/StoreContext";
 import { Product } from "src/app/layout/models/product";
+import { priceFormat } from "src/app/util/util";
 
 interface Props {
 	product: Product;
@@ -63,10 +64,7 @@ const ProductCard = ({ product }: Props) => {
 			/>
 			<CardContent>
 				<Typography gutterBottom color="secondary" variant="h5" component="div">
-					{Intl.NumberFormat("en-US", {
-						style: "currency",
-						currency: "USD",
-					}).format(product.price / 100)}
+					{priceFormat(product.price)}
 				</Typography>
 				<Typography variant="body2" color="text.secondary">
 					{product.brand}/ {product.type}
@@ -76,7 +74,8 @@ const ProductCard = ({ product }: Props) => {
 				<LoadingButton
 					loading={loading}
 					size="small"
-					onClick={async () => await handleAddItem(product.id)}>
+					onClick={async () => await handleAddItem(product.id)}
+				>
 					Add to Cart
 				</LoadingButton>
 				<Button component={Link} to={`/catalog/${product.id}`} size="small">

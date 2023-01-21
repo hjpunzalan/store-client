@@ -12,6 +12,7 @@ import { useParams } from "react-router-dom";
 import agent from "src/app/api/agent";
 import LoadingComponent from "src/app/layout/LoadingComponent";
 import { Product } from "src/app/layout/models/product";
+import { priceFormat } from "src/app/util/util";
 import NotFound from "src/errors/NotFound";
 
 interface Props {}
@@ -45,10 +46,7 @@ const ProductDetails = (props: Props) => {
 				<Typography variant="h3">{product.name}</Typography>
 				<Divider sx={{ mb: 2 }} />
 				<Typography variant="h4" color="secondary">
-					{Intl.NumberFormat("en-US", {
-						style: "currency",
-						currency: "USD",
-					}).format(product.price / 100)}
+					{priceFormat(product.price)}
 				</Typography>
 				<Table>
 					<TableBody>

@@ -2,7 +2,9 @@ import { Add, Delete, Remove } from "@mui/icons-material";
 import { LoadingButton } from "@mui/lab";
 import {
 	Box,
+	Grid,
 	Paper,
+	Stack,
 	Table,
 	TableBody,
 	TableCell,
@@ -14,6 +16,8 @@ import {
 import { useState } from "react";
 import agent from "src/app/api/agent";
 import { useStoreContext } from "src/app/context/StoreContext";
+import { priceFormat } from "src/app/util/util";
+import BasketSummary from "./BasketSummary";
 
 const BasketPage = () => {
 	const { basket, setBasket, removeItem } = useStoreContext();
@@ -53,7 +57,7 @@ const BasketPage = () => {
 	if (!basket)
 		return <Typography variant="h3"> Your basket is Empty</Typography>;
 	return (
-		<div>
+		<Stack spacing={4}>
 			<h1>Buyer Id = {basket.buyerId}</h1>
 			<TableContainer component={Paper}>
 				<Table sx={{ minWidth: 650 }} aria-label="simple table">
@@ -81,12 +85,7 @@ const BasketPage = () => {
 										<span>{item.name}</span>
 									</Box>
 								</TableCell>
-								<TableCell align="right">
-									{Intl.NumberFormat("en-US", {
-										style: "currency",
-										currency: "USD",
-									}).format(item.price / 100)}
-								</TableCell>
+								<TableCell align="right">{priceFormat(item.price)}</TableCell>
 								<TableCell align="center">
 									<LoadingButton
 										loading={
@@ -118,10 +117,7 @@ const BasketPage = () => {
 									</LoadingButton>
 								</TableCell>
 								<TableCell align="right">
-									{Intl.NumberFormat("en-US", {
-										style: "currency",
-										currency: "USD",
-									}).format((item.quantity * item.price) / 100)}
+									{priceFormat(item.quantity * item.price)}
 								</TableCell>
 								<TableCell>
 									<LoadingButton
@@ -145,7 +141,13 @@ const BasketPage = () => {
 					</TableBody>
 				</Table>
 			</TableContainer>
-		</div>
+			<Grid container>
+				<Grid item xs={6} />
+				<Grid item xs={6}>
+					<BasketSummary />
+				</Grid>
+			</Grid>
+		</Stack>
 	);
 };
 
