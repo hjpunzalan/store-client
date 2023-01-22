@@ -1,10 +1,9 @@
-import { Typography } from "@mui/material";
-import { useSelector } from "react-redux";
-import { CounterState } from "./counterReducer";
+import { Button, ButtonGroup, Typography } from "@mui/material";
+import { useDispatch, useSelector } from "react-redux";
+import { CounterActions, CounterState } from "./counterReducer";
 
-interface Props {}
-
-const ContactPage = (props: Props) => {
+const ContactPage = () => {
+	const dispatch = useDispatch();
 	const { data, title } = useSelector((state: CounterState) => state);
 	return (
 		<>
@@ -12,6 +11,22 @@ const ContactPage = (props: Props) => {
 			<Typography component="p" variant="h5">
 				The data is :{data}
 			</Typography>
+			<ButtonGroup>
+				<Button
+					onClick={() => dispatch({ type: CounterActions.DECREMENT_COUNTER })}
+					variant="contained"
+					color="error"
+				>
+					Decrement
+				</Button>
+				<Button
+					onClick={() => dispatch({ type: CounterActions.INCREMENT_COUNTER })}
+					variant="contained"
+					color="primary"
+				>
+					Increment
+				</Button>
+			</ButtonGroup>
 		</>
 	);
 };
