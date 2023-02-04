@@ -8,7 +8,6 @@ import { Router } from 'react-router';
 import { BrowserRouter } from 'react-router-dom';
 import { store } from 'src/app/store/configureStore';
 
-import { StoreProvider } from './app/context/StoreContext';
 import App from './app/layout/App';
 import reportWebVitals from './reportWebVitals';
 
@@ -20,13 +19,11 @@ export const history = createBrowserHistory();
 root.render(
 	<BrowserRouter>
 		<Router history={history}>
-			<StoreProvider>
 				<Provider store={store}>
 					<React.StrictMode>
 						<App />
 					</React.StrictMode>
 				</Provider>
-			</StoreProvider>
 		</Router>
 	</BrowserRouter>
 );
