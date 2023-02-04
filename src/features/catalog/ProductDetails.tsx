@@ -13,17 +13,19 @@ import {
 import { useCallback, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import agent from "src/app/api/agent";
-import { useStoreContext } from "src/app/context/StoreContext";
 import LoadingComponent from "src/app/layout/LoadingComponent";
 import { Product } from "src/app/layout/models/product";
+import { useAppDispatch, useAppSelector } from "src/app/store/configureStore";
 import { priceFormat } from "src/app/util/util";
 import NotFound from "src/errors/NotFound";
+import { removeItem, setBasket } from "src/features/basket/basketSlice";
 
 interface Props {}
 
 const ProductDetails = (props: Props) => {
+	const dispatch = useAppDispatch()
+const { basket } = useAppSelector((state) => state.basket);
 	const { id } = useParams<{ id: string }>();
-	const { basket, setBasket, removeItem } = useStoreContext();
 	const [product, setProduct] = useState<Product | null>(null);
 	const [loading, setLoading] = useState(true);
 	const [quantity, setQuantity] = useState(0);
@@ -40,17 +42,17 @@ const ProductDetails = (props: Props) => {
 			setSubmitting(true);
 			if (quantity > itemQuantity) {
 				const b = await agent.Basket.addItem(product.id, diff);
-				setBasket(b);
+				dispatch(setBasket((b)))
 			} else {
 				await agent.Basket.removeItem(product.id, diff);
-				removeItem(product.id, diff);
+				dispatch(removeItem({productId: product.id, quantity:diff}))
 			}
 		} catch (error) {
 			console.error(error);
 		} finally {
 			setSubmitting(false);
 		}
-	}, [item?.quantity, product, quantity, removeItem, setBasket]);
+	}, [dispatch, item?.quantity, product, quantity]);
 
 	useEffect(() => {
 		if (item) {
