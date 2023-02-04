@@ -7,11 +7,11 @@ import {
 	TableRow,
 } from "@mui/material";
 import { useMemo } from "react";
-import { useStoreContext } from "src/app/context/StoreContext";
+import { useAppSelector } from "src/app/store/configureStore";
 import { priceFormat } from "src/app/util/util";
 
 export default function BasketSummary() {
-	const { basket } = useStoreContext();
+const {basket} = useAppSelector(state=>state.basket)
 	const subTotal = useMemo(() => {
 		return (
 			basket?.items.reduce((sum, item) => {
