@@ -8,10 +8,12 @@ import { useEffect, useState } from "react";
 import { Route, Switch } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { useAppDispatch } from "src/app/store/configureStore";
 import NotFound from "src/errors/NotFound";
 import ServerError from "src/errors/ServerError";
 import AboutPage from "src/features/about/AboutPage";
 import BasketPage from "src/features/basket/BasketPage";
+import { setBasket } from "src/features/basket/basketSlice";
 import Catalog from "src/features/catalog/Catalog";
 import ProductDetails from "src/features/catalog/ProductDetails";
 import CheckoutPage from "src/features/checkout/CheckoutPage";
@@ -19,26 +21,25 @@ import ContactPage from "src/features/contact/ContactPage";
 import HomePage from "src/features/home/HomePage";
 import { useToggle } from "src/hooks/useToggle";
 import agent from "../api/agent";
-import { useStoreContext } from "../context/StoreContext";
 import { getCookie } from "../util/util";
 import Header from "./Header";
 import LoadingComponent from "./LoadingComponent";
 
 function App() {
-	const { setBasket } = useStoreContext();
+	const dispatch = useAppDispatch()
 	const [loading, setLoading] = useState(true);
 
 	useEffect(() => {
 		const buyerId = getCookie("buyerId");
 		if (buyerId) {
 			agent.Basket.get()
-				.then((basket) => setBasket(basket))
+				.then((basket) => dispatch(setBasket(basket)))
 				.catch((err) => console.error(err))
 				.finally(() => setLoading(false));
 		} else {
 			setLoading(false);
 		}
-	}, [setBasket]);
+	}, [dispatch]);
 
 	const [darkMode, toggleDarkMode] = useToggle(false);
 	const paletteType = darkMode ? "dark" : "light";

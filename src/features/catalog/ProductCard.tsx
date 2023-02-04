@@ -13,23 +13,24 @@ import {
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import agent from "src/app/api/agent";
-import { useStoreContext } from "src/app/context/StoreContext";
 import { Product } from "src/app/layout/models/product";
+import { useAppDispatch } from "src/app/store/configureStore";
 import { priceFormat } from "src/app/util/util";
+import { setBasket } from "src/features/basket/basketSlice";
 
 interface Props {
 	product: Product;
 }
 
 const ProductCard = ({ product }: Props) => {
+	const dispatch = useAppDispatch()
 	const [loading, setLoading] = useState(false);
-	const { setBasket } = useStoreContext();
 
 	const handleAddItem = async (productId: number) => {
 		try {
 			setLoading(true);
 			const basket = await agent.Basket.addItem(productId);
-			setBasket(basket);
+			dispatch(setBasket(basket));
 		} catch (err) {
 			console.error(err);
 		} finally {
