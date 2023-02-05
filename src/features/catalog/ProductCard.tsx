@@ -48,7 +48,7 @@ const ProductCard = ({ product }: Props) => {
         <LoadingButton
           loading={status.includes("pendingAddItem" + [product.id])}
           size="small"
-          onClick={async () => await dispatch(addBasketItemAsync({ productId: product.id }))}
+          onClick={async () => await dispatch(addBasketItemAsync({ productId: product.id, quantity: 1 }))}
         >
           Add to Cart
         </LoadingButton>
