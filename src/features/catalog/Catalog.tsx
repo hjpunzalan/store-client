@@ -3,29 +3,27 @@ import { useEffect, useState } from "react";
 import agent from "src/app/api/agent";
 import LoadingComponent from "src/app/layout/LoadingComponent";
 import { Product } from "src/app/layout/models/product";
+import { useAppDispatch, useAppSelector } from "src/app/store/configureStore";
+import { fetchProductsAsync, productSelectors } from "src/features/catalog/catalogSlice";
 import ProductList from "./ProductList";
 
 const Catalog = () => {
-	const [products, setProducts] = useState<Product[] | undefined>();
-	const [loading, setLoading] = useState(true);
+  const products = useAppSelector(productSelectors.selectAll);
+  const dispatch = useAppDispatch();
+  const { productsLoaded, status } = useAppSelector((state) => state.catalog);
 
-	useEffect(() => {
-		agent.Catalog.list()
-			.then((data) => {
-				setProducts(data);
-			})
-			.catch((err) => console.log(err))
-			.finally(() => setLoading(false));
-	}, []);
+  useEffect(() => {
+    if (!productsLoaded) dispatch(fetchProductsAsync());
+  }, [productsLoaded]);
 
-	if (loading) return <LoadingComponent message="Loading Products..." />;
+  if (status.includes("pending")) return <LoadingComponent message="Loading Products..." />;
 
-	return (
-		<>
-			{products && <ProductList products={products} />}
-			<Button variant="contained">Add Product</Button>
-		</>
-	);
+  return (
+    <>
+      {products && <ProductList products={products} />}
+      <Button variant="contained">Add Product</Button>
+    </>
+  );
 };
 
 export default Catalog;
