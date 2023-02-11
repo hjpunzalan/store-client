@@ -1,8 +1,6 @@
 import { Button } from "@mui/material";
-import { useEffect, useState } from "react";
-import agent from "src/app/api/agent";
+import { useEffect } from "react";
 import LoadingComponent from "src/app/layout/LoadingComponent";
-import { Product } from "src/app/layout/models/product";
 import { useAppDispatch, useAppSelector } from "src/app/store/configureStore";
 import { fetchProductsAsync, productSelectors } from "src/features/catalog/catalogSlice";
 import ProductList from "./ProductList";
@@ -14,7 +12,7 @@ const Catalog = () => {
 
   useEffect(() => {
     if (!productsLoaded) dispatch(fetchProductsAsync());
-  }, [productsLoaded]);
+  }, [dispatch, productsLoaded]);
 
   if (status.includes("pending")) return <LoadingComponent message="Loading Products..." />;
 

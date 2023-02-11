@@ -14,7 +14,6 @@ import { useCallback, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import agent from "src/app/api/agent";
 import LoadingComponent from "src/app/layout/LoadingComponent";
-import { Product } from "src/app/layout/models/product";
 import { useAppDispatch, useAppSelector } from "src/app/store/configureStore";
 import { priceFormat } from "src/app/util/util";
 import NotFound from "src/errors/NotFound";
@@ -23,8 +22,8 @@ import { fetchProductAsync, productSelectors } from "src/features/catalog/catalo
 
 const ProductDetails = () => {
   const dispatch = useAppDispatch();
-  const { basket, status: productStatus } = useAppSelector((state) => state.basket);
-  const { status: catalogStatus } = useAppSelector((state) => state.catalog);
+  const { basket, status: basketStatus } = useAppSelector((state) => state.basket);
+  const { status: productStatus } = useAppSelector((state) => state.catalog);
   const { id } = useParams<{ id: string }>();
   const product = useAppSelector((state) => productSelectors.selectById(state, id));
   const [quantity, setQuantity] = useState(0);
@@ -54,10 +53,10 @@ const ProductDetails = () => {
     if (item) {
       setQuantity(item.quantity);
     }
-    if (!product) dispatch(fetchProductAsync(Number(id)));
+    if (!product) dispatch(fetchProductAsync(parseInt(id)));
   }, [dispatch, id, item, product]);
 
-  if (productStatus === "pending") return <LoadingComponent message="Loading product..." />;
+  if (productStatus === "pendingFetchProduct") return <LoadingComponent message="Loading product..." />;
   if (!product) return <NotFound />;
   return (
     <Grid container spacing={6}>
@@ -114,7 +113,7 @@ const ProductDetails = () => {
           <Grid item xs={6}>
             <LoadingButton
               onClick={updateQuantity}
-              loading={productStatus.includes("pendingRemoveItem" + product.id)}
+              loading={basketStatus.includes("pendingRemoveItem" + product.id)}
               disabled={quantity === item?.quantity || (!item && quantity === 0)}
               color="primary"
               size="large"
