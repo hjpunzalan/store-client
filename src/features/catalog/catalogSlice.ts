@@ -3,7 +3,7 @@ import agent from "src/app/api/agent";
 import { Product } from "src/app/layout/models/product";
 import { RootState } from "./../../app/store/configureStore";
 
-const productsAadapter = createEntityAdapter<Product>();
+const productsAdapter = createEntityAdapter<Product>();
 
 export const fetchProductsAsync = createAsyncThunk<Product[]>("catalog/fetchProductsAsync", async () => {
   try {
@@ -13,9 +13,17 @@ export const fetchProductsAsync = createAsyncThunk<Product[]>("catalog/fetchProd
   }
 });
 
+export const fetchProductAsync = createAsyncThunk<Product, number>("catalog/fetchProductAsync", async (productId) => {
+  try {
+    return await agent.Catalog.details(productId);
+  } catch (err) {
+    console.error(err);
+  }
+});
+
 export const catalogSlice = createSlice({
   name: "catalog",
-  initialState: productsAadapter.getInitialState({
+  initialState: productsAdapter.getInitialState({
     productsLoaded: false,
     status: "idle",
   }),
@@ -25,14 +33,24 @@ export const catalogSlice = createSlice({
       state.status = "pendingFetchProducts";
     });
     builder.addCase(fetchProductsAsync.fulfilled, (state, action) => {
-      productsAadapter.setAll(state, action.payload);
+      productsAdapter.setAll(state, action.payload);
       state.status = "idle";
       state.productsLoaded = true;
     });
     builder.addCase(fetchProductsAsync.rejected, (state) => {
       state.status = "idle";
     });
+    builder.addCase(fetchProductAsync.pending, (state) => {
+      state.status = "pendingFetchProduct";
+    });
+    builder.addCase(fetchProductAsync.fulfilled, (state, action) => {
+      productsAdapter.upsertOne(state, action.payload);
+      state.status = "idle";
+    });
+    builder.addCase(fetchProductAsync.rejected, (state) => {
+      state.status = "idle";
+    });
   },
 });
 
-export const productSelectors = productsAadapter.getSelectors((state: RootState) => state.catalog);
+export const productSelectors = productsAdapter.getSelectors((state: RootState) => state.catalog);

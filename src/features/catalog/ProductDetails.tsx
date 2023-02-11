@@ -19,13 +19,14 @@ import { useAppDispatch, useAppSelector } from "src/app/store/configureStore";
 import { priceFormat } from "src/app/util/util";
 import NotFound from "src/errors/NotFound";
 import { removeBasketItemAsync, setBasket } from "src/features/basket/basketSlice";
+import { fetchProductAsync, productSelectors } from "src/features/catalog/catalogSlice";
 
 const ProductDetails = () => {
   const dispatch = useAppDispatch();
-  const { basket, status } = useAppSelector((state) => state.basket);
+  const { basket, status: productStatus } = useAppSelector((state) => state.basket);
+  const { status: catalogStatus } = useAppSelector((state) => state.catalog);
   const { id } = useParams<{ id: string }>();
-  const [product, setProduct] = useState<Product | null>(null);
-  const [loading, setLoading] = useState(true);
+  const product = useAppSelector((state) => productSelectors.selectById(state, id));
   const [quantity, setQuantity] = useState(0);
 
   const item = basket?.items.find((item) => item.productId === product?.id);
@@ -53,15 +54,10 @@ const ProductDetails = () => {
     if (item) {
       setQuantity(item.quantity);
     }
-    agent.Catalog.details(parseInt(id))
-      .then((data) => {
-        setProduct(data);
-      })
-      .catch((err) => console.error(err))
-      .finally(() => setLoading(false));
-  }, [id, item]);
+    if (!product) dispatch(fetchProductAsync(Number(id)));
+  }, [dispatch, id, item, product]);
 
-  if (loading) return <LoadingComponent message="Loading product..." />;
+  if (productStatus === "pending") return <LoadingComponent message="Loading product..." />;
   if (!product) return <NotFound />;
   return (
     <Grid container spacing={6}>
@@ -118,7 +114,7 @@ const ProductDetails = () => {
           <Grid item xs={6}>
             <LoadingButton
               onClick={updateQuantity}
-              loading={status.includes("pendingRemoveItem" + product.id)}
+              loading={productStatus.includes("pendingRemoveItem" + product.id)}
               disabled={quantity === item?.quantity || (!item && quantity === 0)}
               color="primary"
               size="large"
