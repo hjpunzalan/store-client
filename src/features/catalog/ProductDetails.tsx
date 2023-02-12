@@ -12,12 +12,11 @@ import {
 } from "@mui/material";
 import { useCallback, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import agent from "src/app/api/agent";
 import LoadingComponent from "src/app/layout/LoadingComponent";
 import { useAppDispatch, useAppSelector } from "src/app/store/configureStore";
 import { priceFormat } from "src/app/util/util";
 import NotFound from "src/errors/NotFound";
-import { removeBasketItemAsync, setBasket } from "src/features/basket/basketSlice";
+import { addBasketItemAsync, removeBasketItemAsync } from "src/features/basket/basketSlice";
 import { fetchProductAsync, productSelectors } from "src/features/catalog/catalogSlice";
 
 const ProductDetails = () => {
@@ -37,15 +36,12 @@ const ProductDetails = () => {
 
     try {
       if (quantity > itemQuantity) {
-        const b = await agent.Basket.addItem(product.id, diff);
-        dispatch(setBasket(b));
+        dispatch(addBasketItemAsync({ productId: product.id, quantity: diff }));
       } else {
-        await agent.Basket.removeItem(product.id, diff);
         dispatch(removeBasketItemAsync({ productId: product.id, quantity: diff }));
       }
     } catch (error) {
       console.error(error);
-    } finally {
     }
   }, [dispatch, item?.quantity, product, quantity]);
 
@@ -113,7 +109,7 @@ const ProductDetails = () => {
           <Grid item xs={6}>
             <LoadingButton
               onClick={updateQuantity}
-              loading={basketStatus.includes("pendingRemoveItem" + product.id)}
+              loading={basketStatus.includes("pending")}
               disabled={quantity === item?.quantity || (!item && quantity === 0)}
               color="primary"
               size="large"
