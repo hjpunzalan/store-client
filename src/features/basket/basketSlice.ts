@@ -14,11 +14,11 @@ const initialState: BasketState = {
 
 export const addBasketItemAsync = createAsyncThunk<Basket | undefined, { productId: number; quantity: number }>(
   "basket/addBasketItemAsync",
-  async ({ productId, quantity }) => {
+  async ({ productId, quantity }, thunkAPI) => {
     try {
       return await agent.Basket.addItem(productId, quantity);
-    } catch (error) {
-      console.log(error);
+    } catch (error: any) {
+      return thunkAPI.rejectWithValue({ error: error.data });
     }
   }
 );
