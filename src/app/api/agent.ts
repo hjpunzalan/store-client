@@ -48,14 +48,14 @@ storeAPI.interceptors.response.use(
 );
 
 const requests = {
-  get: (url: string) => storeAPI.get(url).then(responseBody),
+  get: (url: string, params?: URLSearchParams) => storeAPI.get(url, { params }).then(responseBody),
   post: <T>(url: string, body: {}) => storeAPI.post(url, body).then((res) => responseBody<T>(res)),
   put: (url: string, body: {}) => storeAPI.put(url, body).then(responseBody),
   delete: (url: string) => storeAPI.delete(url).then(responseBody),
 };
 
 const Catalog = {
-  list: () => requests.get("/products"),
+  list: (params: URLSearchParams) => requests.get("/products", params),
   details: (id: number) => requests.get(`/products/${id}`),
   fetchFilters: () => requests.get("/products/filters"),
 };
