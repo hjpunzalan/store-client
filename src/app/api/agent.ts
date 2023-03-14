@@ -9,7 +9,7 @@ const sleep = () =>
   new Promise<void>((resolve) =>
     setTimeout(() => {
       return resolve();
-    }, 1000)
+    }, 500)
   );
 
 storeAPI.interceptors.response.use(
