@@ -27,7 +27,7 @@ import { RadioButtonGroup } from "src/app/components/RadioButtonGroup";
 const sortOptions = [
   { value: "name", name: "Alphabetical" },
   { value: "priceDesc", name: "Price - High to low" },
-  { value: "priceAsc", name: "Price - Low to high" },
+  { value: "price", name: "Price - Low to high" },
 ];
 
 const Catalog = () => {
