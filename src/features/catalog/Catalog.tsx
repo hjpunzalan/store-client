@@ -1,19 +1,10 @@
-import {
-  Box,
-  Checkbox,
-  FormControl,
-  FormControlLabel,
-  FormGroup,
-  Grid,
-  Pagination,
-  Paper,
-  Radio,
-  RadioGroup,
-  Typography,
-} from "@mui/material";
+import { Box, Grid, Pagination, Paper, Typography } from "@mui/material";
 import { useEffect } from "react";
+import { CheckBoxButtons } from "src/app/components/CheckBoxButtons";
+import { RadioButtonGroup } from "src/app/components/RadioButtonGroup";
 import LoadingComponent from "src/app/layout/LoadingComponent";
 import { useAppDispatch, useAppSelector } from "src/app/store/configureStore";
+import { ProductSearch } from "src/features/catalog/ProductSearch";
 import {
   fetchFilters,
   fetchProductsAsync,
@@ -21,8 +12,6 @@ import {
   setProductParams,
 } from "src/features/catalog/catalogSlice";
 import ProductList from "./ProductList";
-import { ProductSearch } from "src/features/catalog/ProductSearch";
-import { RadioButtonGroup } from "src/app/components/RadioButtonGroup";
 
 const sortOptions = [
   { value: "name", name: "Alphabetical" },
@@ -61,18 +50,18 @@ const Catalog = () => {
           />
         </Paper>
         <Paper sx={{ p: 2, mb: 2 }}>
-          <FormGroup>
-            {brands.map((brand) => (
-              <FormControlLabel key={brand} control={<Checkbox />} label={brand} />
-            ))}
-          </FormGroup>
+          <CheckBoxButtons
+            items={brands}
+            checked={productParams.brands}
+            onChange={(items: string[]) => dispatch(setProductParams({ brands: items }))}
+          />
         </Paper>
         <Paper sx={{ p: 2, mb: 2 }}>
-          <FormGroup>
-            {types.map((type) => (
-              <FormControlLabel key={type} control={<Checkbox />} label={type} />
-            ))}
-          </FormGroup>
+          <CheckBoxButtons
+            items={types}
+            checked={productParams.types}
+            onChange={(items: string[]) => dispatch(setProductParams({ types: items }))}
+          />
         </Paper>
       </Grid>
       <Grid item xs={9}>
