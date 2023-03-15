@@ -1,5 +1,6 @@
 import { AxiosError, AxiosResponse } from "axios";
 import { history } from "src";
+import { PaginatedResponse } from "src/app/models/pagitionation";
 import { Basket as BasketType } from "../models/basket";
 import { storeAPI } from "./../../helpers/axios";
 
@@ -15,6 +16,10 @@ const sleep = () =>
 storeAPI.interceptors.response.use(
   async (response) => {
     await sleep();
+    const pagination = response.headers["pagination"];
+    if (pagination) {
+      response.data = new PaginatedResponse(response.data, JSON.parse(pagination));
+    }
     return response;
   },
   (error: AxiosError<any>) => {
