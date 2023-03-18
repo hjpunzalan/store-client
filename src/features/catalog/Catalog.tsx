@@ -46,7 +46,7 @@ const Catalog = () => {
   useEffect(() => {
     if (!currentPage) return;
     dispatch(setProductParams({ pageNumber: currentPage }));
-  }, [currentPage, dispatch, location.search]);
+  }, [currentPage, dispatch]);
 
   if (status.includes("pending")) return <LoadingComponent message="Loading Products..." />;
 
@@ -60,7 +60,12 @@ const Catalog = () => {
           <RadioButtonGroup
             selectedValue={productParams.orderBy}
             options={sortOptions}
-            onChange={(e) => dispatch(setProductParams({ orderBy: e.target.value }))}
+            onChange={(e) => {
+              dispatch(setProductParams({ orderBy: e.target.value }));
+              history.push({
+                pathname: "catalog",
+              });
+            }}
           />
         </Paper>
         <Paper sx={{ p: 2, mb: 2 }}>
