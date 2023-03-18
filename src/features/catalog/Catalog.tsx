@@ -12,6 +12,8 @@ import {
   setProductParams,
 } from "src/features/catalog/catalogSlice";
 import ProductList from "./ProductList";
+import { history } from "src";
+import { useLocation } from "react-router-dom";
 
 const sortOptions = [
   { value: "name", name: "Alphabetical" },
@@ -20,6 +22,7 @@ const sortOptions = [
 ];
 
 const Catalog = () => {
+  const location = useLocation();
   const products = useAppSelector(productSelectors.selectAll);
   const dispatch = useAppDispatch();
   const { productsLoaded, status, filtersLoaded, brands, types, productParams, metaData } = useAppSelector(
@@ -28,6 +31,10 @@ const Catalog = () => {
   const pageSize = metaData && metaData.pageSize ? productParams.pageSize : 1;
   const nDisplayItems = `${productParams.pageNumber * pageSize - pageSize + 1}-${productParams.pageNumber * pageSize}`;
 
+  // Update page number based on url query
+  const params = new URLSearchParams(location.search);
+  const currentPage = params.get("page") ? parseInt(params.get("page")!) : null;
+
   useEffect(() => {
     if (!productsLoaded) dispatch(fetchProductsAsync());
   }, [dispatch, productsLoaded]);
@@ -35,6 +42,11 @@ const Catalog = () => {
   useEffect(() => {
     if (!filtersLoaded) dispatch(fetchFilters());
   }, [dispatch, filtersLoaded]);
+
+  useEffect(() => {
+    if (!currentPage) return;
+    dispatch(setProductParams({ pageNumber: currentPage }));
+  }, [currentPage, dispatch, location.search]);
 
   if (status.includes("pending")) return <LoadingComponent message="Loading Products..." />;
 
@@ -81,7 +93,7 @@ const Catalog = () => {
             size="large"
             count={metaData?.totalPages || 1}
             page={productParams.pageNumber}
-            onChange={(_, page) => dispatch(setProductParams({ pageNumber: page }))}
+            onChange={(_, page) => history.push(`catalog?page=${page}`)}
           />
         </Box>
       </Grid>
