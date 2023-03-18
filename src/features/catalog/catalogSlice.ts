@@ -58,7 +58,7 @@ export const fetchFilters = createAsyncThunk("catalog/fetchFilters", async (_, t
 });
 
 function initParams() {
-  return { pageNumber: 1, pageSize: 6, orderBy: "name" };
+  return { pageNumber: 1, pageSize: 6, orderBy: "name", totalPages: 3 };
 }
 
 export const catalogSlice = createSlice({

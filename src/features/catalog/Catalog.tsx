@@ -22,9 +22,11 @@ const sortOptions = [
 const Catalog = () => {
   const products = useAppSelector(productSelectors.selectAll);
   const dispatch = useAppDispatch();
-  const { productsLoaded, status, filtersLoaded, brands, types, productParams } = useAppSelector(
+  const { productsLoaded, status, filtersLoaded, brands, types, productParams, metaData } = useAppSelector(
     (state) => state.catalog
   );
+  const pageSize = metaData && metaData.pageSize ? productParams.pageSize : 1;
+  const nDisplayItems = `${productParams.pageNumber * pageSize - pageSize + 1}-${productParams.pageNumber * pageSize}`;
 
   useEffect(() => {
     if (!productsLoaded) dispatch(fetchProductsAsync());
@@ -70,8 +72,17 @@ const Catalog = () => {
       <Grid item xs={3} />
       <Grid item xs={9}>
         <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
-          <Typography>Display 1-6 of 20 items</Typography>
-          <Pagination color="secondary" size="large" count={10} page={2} />
+          <Typography>
+            Displaying {nDisplayItems}&nbsp;
+            {metaData && `of ${metaData?.totalCount} items`}
+          </Typography>
+          <Pagination
+            color="secondary"
+            size="large"
+            count={metaData?.totalPages || 1}
+            page={productParams.pageNumber}
+            onChange={(_, page) => dispatch(setProductParams({ pageNumber: page }))}
+          />
         </Box>
       </Grid>
     </Grid>
