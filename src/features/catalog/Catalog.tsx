@@ -21,6 +21,15 @@ const sortOptions = [
   { value: "price", name: "Price - Low to high" },
 ];
 
+export const redirectAddParams = (field: string, value: any) => {
+  const newParams = new URLSearchParams();
+  newParams.append(field, value);
+  history.push({
+    pathname: "catalog",
+    search: newParams.toString(),
+  });
+};
+
 const Catalog = () => {
   const location = useLocation();
   const products = useAppSelector(productSelectors.selectAll);
@@ -34,6 +43,9 @@ const Catalog = () => {
   // Update page number based on url query
   const params = new URLSearchParams(location.search);
   const currentPage = params.get("page") ? parseInt(params.get("page")!) : null;
+  const currentOrderBy = params.get("orderBy");
+  const currentTypes = params.get("types");
+  const currentBrands = params.get("brands");
 
   useEffect(() => {
     if (!productsLoaded) dispatch(fetchProductsAsync());
@@ -48,6 +60,21 @@ const Catalog = () => {
     dispatch(setProductParams({ pageNumber: currentPage }));
   }, [currentPage, dispatch]);
 
+  useEffect(() => {
+    if (!currentOrderBy) return;
+    dispatch(setProductParams({ orderBy: currentOrderBy }));
+  }, [currentOrderBy, dispatch]);
+
+  useEffect(() => {
+    if (!currentTypes) return;
+    dispatch(setProductParams({ types: currentTypes.split(",") }));
+  }, [currentTypes, dispatch]);
+
+  useEffect(() => {
+    if (!currentBrands) return;
+    dispatch(setProductParams({ brands: currentBrands.split(",") }));
+  }, [currentBrands, dispatch]);
+
   if (status.includes("pending")) return <LoadingComponent message="Loading Products..." />;
 
   return (
@@ -60,26 +87,21 @@ const Catalog = () => {
           <RadioButtonGroup
             selectedValue={productParams.orderBy}
             options={sortOptions}
-            onChange={(e) => {
-              dispatch(setProductParams({ orderBy: e.target.value }));
-              history.push({
-                pathname: "catalog",
-              });
-            }}
+            onChange={(e) => redirectAddParams("orderBy", e.target.value)}
           />
         </Paper>
         <Paper sx={{ p: 2, mb: 2 }}>
           <CheckBoxButtons
             items={brands}
             checked={productParams.brands}
-            onChange={(items: string[]) => dispatch(setProductParams({ brands: items }))}
+            onChange={(items: string[]) => redirectAddParams("brands", items)}
           />
         </Paper>
         <Paper sx={{ p: 2, mb: 2 }}>
           <CheckBoxButtons
             items={types}
             checked={productParams.types}
-            onChange={(items: string[]) => dispatch(setProductParams({ types: items }))}
+            onChange={(items: string[]) => redirectAddParams("types", items)}
           />
         </Paper>
       </Grid>
