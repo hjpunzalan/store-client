@@ -22,6 +22,10 @@ const sortOptions = [
 ];
 
 export const redirectAddParams = (field: string, value: any) => {
+  if (!value || value.length === 0) {
+    history.push("catalog");
+    return;
+  }
   const newParams = new URLSearchParams();
   newParams.append(field, value);
   history.push({
