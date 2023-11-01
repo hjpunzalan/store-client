@@ -11,21 +11,29 @@ import MuiLink from "@mui/material/Link";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
-import * as React from "react";
+import { useState } from "react";
 import { Link } from "react-router-dom";
+import agent from "src/app/api/agent";
 
 // TODO remove, this demo shouldn't need to reset the theme.
 const defaultTheme = createTheme();
 
 export default function Login() {
+  const [values, setValues] = useState({
+    username: "",
+    password: "",
+  });
+
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get("email"),
-      password: data.get("password"),
-    });
+    // Submit to server
+    agent.Account.login(values);
   };
+
+  function handleInputChange(event: any) {
+    const { name, value } = event.target;
+    setValues({ ...values, [name]: value });
+  }
 
   return (
     <ThemeProvider theme={defaultTheme}>
@@ -45,11 +53,13 @@ export default function Login() {
             margin="normal"
             required
             fullWidth
-            id="email"
-            label="Email Address"
-            name="email"
-            autoComplete="email"
+            id="username"
+            label="Username"
+            name="username"
+            autoComplete="username"
             autoFocus
+            value={values.username}
+            onChange={handleInputChange}
           />
           <TextField
             margin="normal"
@@ -59,7 +69,9 @@ export default function Login() {
             label="Password"
             type="password"
             id="password"
+            value={values.password}
             autoComplete="current-password"
+            onChange={handleInputChange}
           />
           <FormControlLabel control={<Checkbox value="remember" color="primary" />} label="Remember me" />
           <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>

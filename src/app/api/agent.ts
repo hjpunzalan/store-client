@@ -1,4 +1,5 @@
 import { AxiosError, AxiosResponse } from "axios";
+import { toast } from "react-toastify";
 import { history } from "src";
 import { PaginatedResponse } from "src/app/models/pagitionation";
 import { Basket as BasketType } from "../models/basket";
@@ -35,9 +36,9 @@ storeAPI.interceptors.response.use(
 
         throw modelStateErrors.flat();
       }
-      //   toast(`${status} - ${(data as any).title}`, {
-      //     type: "error",
-      //   });
+      toast(`${status} - ${(data as any).title}`, {
+        type: "error",
+      });
 
       if (status.toString().startsWith("5")) {
         history.push({
