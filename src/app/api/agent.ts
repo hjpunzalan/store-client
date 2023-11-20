@@ -1,6 +1,7 @@
 import { AxiosError, AxiosResponse } from "axios";
 import { toast } from "react-toastify";
 import { history } from "src";
+import { User } from "src/app/models/User";
 import { PaginatedResponse } from "src/app/models/pagitionation";
 import { Basket as BasketType } from "../models/basket";
 import { storeAPI } from "./../../helpers/axios";
@@ -75,7 +76,7 @@ const Basket = {
 };
 
 const Account = {
-  login: (values: any) => requests.post("account/login", values),
+  login: (values: any) => requests.post<User>("account/login", values),
   register: (values: any) => requests.post("account/register", values),
   currentUser: () => requests.get("account/currentUser"),
 };

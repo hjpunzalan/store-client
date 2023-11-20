@@ -12,13 +12,16 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 import { FieldValues, useForm } from "react-hook-form";
-import { Link } from "react-router-dom";
-import agent from "src/app/api/agent";
+import { Link, useHistory } from "react-router-dom";
+import { useAppDispatch } from "src/app/store/configureStore";
+import { signInUser } from "src/features/account/accountSlice";
 
 // TODO remove, this demo shouldn't need to reset the theme.
 const defaultTheme = createTheme();
 
 export default function Login() {
+  const history = useHistory();
+  const dispatch = useAppDispatch();
   const {
     register,
     handleSubmit,
@@ -27,7 +30,8 @@ export default function Login() {
 
   async function submitForm(data: FieldValues) {
     try {
-      await agent.Account.login(data);
+      await dispatch(signInUser(data));
+      history.push("/catalog");
     } catch (err) {
       console.error(err);
     }
