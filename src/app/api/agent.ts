@@ -37,7 +37,14 @@ storeAPI.interceptors.response.use(
 
         throw modelStateErrors.flat();
       }
-      toast(`${status} - ${(data as any).title}`, {
+      let title = data?.title;
+
+      // Add default title.
+      if (status === 401 && !title) {
+        title = "Unauthorized";
+      }
+
+      toast(`${status} - ${title}`, {
         type: "error",
       });
 

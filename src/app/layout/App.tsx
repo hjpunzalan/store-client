@@ -4,6 +4,7 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Routes from "src/app/router/Routes";
 import { useAppDispatch } from "src/app/store/configureStore";
+import { fetchCurrentUser } from "src/features/account/accountSlice";
 import { setBasket } from "src/features/basket/basketSlice";
 import { useToggle } from "src/hooks/useToggle";
 import agent from "../api/agent";
@@ -17,6 +18,7 @@ function App() {
 
   useEffect(() => {
     const buyerId = getCookie("buyerId");
+    dispatch(fetchCurrentUser());
     if (buyerId) {
       agent.Basket.get()
         .then((basket) => dispatch(setBasket(basket)))
