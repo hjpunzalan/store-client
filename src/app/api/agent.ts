@@ -3,6 +3,7 @@ import { toast } from "react-toastify";
 import { history } from "src";
 import { User } from "src/app/models/User";
 import { PaginatedResponse } from "src/app/models/pagitionation";
+import { store } from "src/app/store/configureStore";
 import { Basket as BasketType } from "../models/basket";
 import { storeAPI } from "./../../helpers/axios";
 
@@ -14,6 +15,12 @@ const sleep = () =>
       return resolve();
     }, 500)
   );
+
+storeAPI.interceptors.request.use((config) => {
+  const token = store.getState().account.user?.token;
+  if (token && config.headers) config.headers.Authorization = `Bearer ${token}`;
+  return config;
+});
 
 storeAPI.interceptors.response.use(
   async (response) => {
@@ -38,15 +45,11 @@ storeAPI.interceptors.response.use(
         throw modelStateErrors.flat();
       }
       let title = data?.title;
-
-      // Add default title.
-      if (status === 401 && !title) {
-        title = "Unauthorized";
+      if (title) {
+        toast(`${status} - ${title}`, {
+          type: "error",
+        });
       }
-
-      toast(`${status} - ${title}`, {
-        type: "error",
-      });
 
       if (status.toString().startsWith("5")) {
         history.push({

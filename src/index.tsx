@@ -5,7 +5,6 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import { Provider } from "react-redux";
 import { Router } from "react-router";
-import { BrowserRouter } from "react-router-dom";
 import { store } from "src/app/store/configureStore";
 
 import App from "./app/layout/App";
@@ -15,15 +14,13 @@ const root = ReactDOM.createRoot(document.getElementById("root") as HTMLElement)
 
 export const history = createBrowserHistory();
 root.render(
-  <BrowserRouter>
+  <Provider store={store}>
     <Router history={history}>
-      <Provider store={store}>
-        <React.StrictMode>
-          <App />
-        </React.StrictMode>
-      </Provider>
+      <React.StrictMode>
+        <App />
+      </React.StrictMode>
     </Router>
-  </BrowserRouter>
+  </Provider>
 );
 
 // If you want to start measuring performance in your app, pass a function

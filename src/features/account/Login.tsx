@@ -3,9 +3,7 @@ import { LoadingButton } from "@mui/lab";
 import { Paper } from "@mui/material";
 import Avatar from "@mui/material/Avatar";
 import Box from "@mui/material/Box";
-import Checkbox from "@mui/material/Checkbox";
 import Container from "@mui/material/Container";
-import FormControlLabel from "@mui/material/FormControlLabel";
 import Grid from "@mui/material/Grid";
 import MuiLink from "@mui/material/Link";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
@@ -71,7 +69,6 @@ export default function Login() {
             error={Boolean(errors.password)}
             helperText={errors?.password?.message as string}
           />
-          <FormControlLabel control={<Checkbox value="remember" color="primary" />} label="Remember me" />
           <LoadingButton
             disabled={!isValid}
             loading={isSubmitting}

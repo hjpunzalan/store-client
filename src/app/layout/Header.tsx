@@ -36,7 +36,7 @@ const Header = ({ toggleDarkMode }: Props) => {
   const { basket } = useAppSelector((state) => state.basket);
   const { user } = useAppSelector((state) => state.account);
   const itemCount = basket?.items.reduce((sum, item) => sum + item.quantity, 0);
-
+  console.log(user);
   return (
     <AppBar position="static" sx={{ mb: (theme) => theme.spacing(4) }}>
       <Toolbar

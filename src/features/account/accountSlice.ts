@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice, isAnyOf } from "@reduxjs/toolkit";
 import { FieldValues } from "react-hook-form";
+import { toast } from "react-toastify";
 import { history } from "src";
 import agent from "src/app/api/agent";
 import { User } from "src/app/models/User";
@@ -22,15 +23,25 @@ export const signInUser = createAsyncThunk<User, FieldValues>("account/signInUse
   }
 });
 
-export const fetchCurrentUser = createAsyncThunk<User>("account/signInUser", async (_, thunkAPI) => {
-  try {
-    const user = await agent.Account.currentUser();
-    localStorage.setItem("user", JSON.stringify(user));
-    return user;
-  } catch (err: any) {
-    return thunkAPI.rejectWithValue({ error: err.data });
+export const fetchCurrentUser = createAsyncThunk<User>(
+  "account/fetchCurrentUser",
+  async (_, thunkAPI) => {
+    thunkAPI.dispatch(setUser(JSON.parse(localStorage.getItem("user")!)));
+
+    try {
+      const user = await agent.Account.currentUser();
+      localStorage.setItem("user", JSON.stringify(user));
+      return user;
+    } catch (err: any) {
+      return thunkAPI.rejectWithValue({ error: err.data });
+    }
+  },
+  {
+    condition: () => {
+      if (!localStorage.getItem("user")) return false;
+    },
   }
-});
+);
 
 export const accountSlice = createSlice({
   name: "account",
@@ -41,16 +52,23 @@ export const accountSlice = createSlice({
       localStorage.removeItem("user");
       history.push("/");
     },
+    setUser: (state, action) => {
+      state.user = action.payload;
+    },
   },
   extraReducers: (builder) => {
+    builder.addCase(fetchCurrentUser.rejected, (state, action) => {
+      state.user = null;
+      toast.error("Session expired - please login again");
+      history.push("/");
+    });
     builder.addMatcher(isAnyOf(signInUser.fulfilled, fetchCurrentUser.fulfilled), (state, action) => {
       state.user = action.payload;
     });
     builder.addMatcher(isAnyOf(signInUser.rejected, fetchCurrentUser.rejected), (state, action) => {
       console.log(action.payload);
-      throw action.payload;
     });
   },
 });
 
-export const { signOut } = accountSlice.actions;
+export const { signOut, setUser } = accountSlice.actions;
