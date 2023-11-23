@@ -1,4 +1,4 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice, isAnyOf } from "@reduxjs/toolkit";
 import agent from "src/app/api/agent";
 import { Basket } from "src/app/models/basket";
 
@@ -31,6 +31,23 @@ export const removeBasketItemAsync = createAsyncThunk<void, { productId: number;
     } catch (error: any) {
       console.log(error);
     }
+  }
+);
+
+export const fetchBasketAsync = createAsyncThunk<Basket>(
+  "basket/fetchBasketAsync",
+  async (_, thunkAPI) => {
+    try {
+      return await agent.Basket.get();
+    } catch (error: any) {
+      console.log(error);
+    }
+  },
+  {
+    condition: () => {
+      console.log(localStorage.getItem("buyerId"));
+      if (!localStorage.getItem("buyerId")) return false;
+    },
   }
 );
 
@@ -72,6 +89,17 @@ export const basketSlice = createSlice({
     });
     builder.addCase(removeBasketItemAsync.rejected, (state, action) => {
       state.status = "idle";
+    });
+
+    builder.addMatcher(isAnyOf(fetchBasketAsync.fulfilled, addBasketItemAsync.fulfilled), (state, action) => {
+      if (!action.payload) return;
+      state.basket = action.payload;
+      state.status = "idle";
+    });
+
+    builder.addMatcher(isAnyOf(fetchBasketAsync.rejected, addBasketItemAsync.rejected), (state, action) => {
+      state.status = "idle";
+      console.log(action.payload);
     });
   },
 });
