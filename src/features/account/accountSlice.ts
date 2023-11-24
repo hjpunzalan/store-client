@@ -62,6 +62,9 @@ export const accountSlice = createSlice({
       toast.error("Session expired - please login again");
       history.push("/");
     });
+    builder.addCase(signInUser.fulfilled, (state, action) => {
+      history.push("/catalog");
+    });
     builder.addMatcher(isAnyOf(signInUser.fulfilled, fetchCurrentUser.fulfilled), (state, action) => {
       state.user = action.payload;
     });
