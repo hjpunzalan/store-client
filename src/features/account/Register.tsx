@@ -9,11 +9,12 @@ import MuiLink from "@mui/material/Link";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 import { FieldValues, useForm } from "react-hook-form";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import { toast } from "react-toastify";
 import agent from "src/app/api/agent";
 
 export default function Register() {
+  const history = useHistory();
   const {
     setError,
     register,
@@ -45,6 +46,7 @@ export default function Register() {
     try {
       await agent.Account.register(data);
       toast.success("Registration successful, you can now login");
+      history.push("/login");
     } catch (err: any) {
       handleApiErrors(err);
     }
