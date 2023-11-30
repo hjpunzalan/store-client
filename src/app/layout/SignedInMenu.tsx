@@ -2,6 +2,7 @@ import { Button, Fade, Menu, MenuItem } from "@mui/material";
 import React from "react";
 import { useAppDispatch, useAppSelector } from "src/app/store/configureStore";
 import { signOut } from "src/features/account/accountSlice";
+import { clearBasket } from "src/features/basket/basketSlice";
 
 export const SignedInMenu: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -30,7 +31,14 @@ export const SignedInMenu: React.FC = () => {
       <Menu anchorEl={anchorEl} open={open} onClose={handleClose} TransitionComponent={Fade}>
         <MenuItem onClick={handleClose}>Profile</MenuItem>
         <MenuItem onClick={handleClose}>My orders</MenuItem>
-        <MenuItem onClick={() => dispatch(signOut())}>Logout</MenuItem>
+        <MenuItem
+          onClick={() => {
+            dispatch(signOut());
+            dispatch(clearBasket());
+          }}
+        >
+          Logout
+        </MenuItem>
       </Menu>
     </>
   );

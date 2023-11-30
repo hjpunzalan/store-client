@@ -1,7 +1,7 @@
 import { AxiosError, AxiosResponse } from "axios";
 import { toast } from "react-toastify";
 import { history } from "src";
-import { User } from "src/app/models/User";
+import { User, UserDto } from "src/app/models/User";
 import { PaginatedResponse } from "src/app/models/pagitionation";
 import { store } from "src/app/store/configureStore";
 import { Basket as BasketType } from "../models/basket";
@@ -65,7 +65,7 @@ storeAPI.interceptors.response.use(
 );
 
 const requests = {
-  get: (url: string, params?: URLSearchParams) => storeAPI.get(url, { params }).then(responseBody),
+  get: <T = any>(url: string, params?: URLSearchParams) => storeAPI.get<T>(url, { params }).then(responseBody),
   post: <T>(url: string, body: {}) => storeAPI.post(url, body).then((res) => responseBody<T>(res)),
   put: (url: string, body: {}) => storeAPI.put(url, body).then(responseBody),
   delete: (url: string) => storeAPI.delete(url).then(responseBody),
@@ -86,9 +86,9 @@ const Basket = {
 };
 
 const Account = {
-  login: (values: any) => requests.post<User>("account/login", values),
+  login: (values: any) => requests.post<UserDto>("account/login", values),
   register: (values: any) => requests.post<User>("account/register", values),
-  currentUser: () => requests.get("account/currentUser"),
+  currentUser: () => requests.get<UserDto>("account/currentUser"),
 };
 
 const TestErrors = {
