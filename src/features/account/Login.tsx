@@ -9,12 +9,15 @@ import MuiLink from "@mui/material/Link";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 import { FieldValues, useForm } from "react-hook-form";
-import { Link } from "react-router-dom";
+import { Link, useHistory, useLocation } from "react-router-dom";
 import { useAppDispatch } from "src/app/store/configureStore";
 import { signInUser } from "src/features/account/accountSlice";
 
 export default function Login() {
   const dispatch = useAppDispatch();
+  const location = useLocation<{ from: string }>();
+  const history = useHistory();
+
   const {
     register,
     handleSubmit,
@@ -24,6 +27,7 @@ export default function Login() {
   async function submitForm(data: FieldValues) {
     try {
       dispatch(signInUser(data));
+      history.push(location.state?.from || "/catalog");
     } catch (err) {
       console.error(err);
     }
