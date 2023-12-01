@@ -20,6 +20,7 @@ export const signInUser = createAsyncThunk<User, FieldValues>("account/signInUse
     const { basket, ...user } = userDto;
     if (basket) thunkAPI.dispatch(setBasket(basket));
     localStorage.setItem("user", JSON.stringify(user));
+    thunkAPI.dispatch(setUser(user));
     return user;
   } catch (err: any) {
     return thunkAPI.rejectWithValue({ error: err.data });
@@ -66,9 +67,6 @@ export const accountSlice = createSlice({
       state.user = null;
       toast.error("Session expired - please login again");
       history.push("/");
-    });
-    builder.addCase(signInUser.fulfilled, (state, action) => {
-      history.push("/catalog");
     });
     builder.addMatcher(isAnyOf(signInUser.fulfilled, fetchCurrentUser.fulfilled), (state, action) => {
       state.user = action.payload;

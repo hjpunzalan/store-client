@@ -16,9 +16,6 @@ const Routes = () => {
   return (
     <>
       <Switch>
-        <RequireAuth>
-          <Route path="/checkout" component={CheckoutPage} />
-        </RequireAuth>
         <Route exact path="/" component={HomePage} />
         <Route exact path="/catalog" component={Catalog} />
         <Route path="/catalog/:id" component={ProductDetails} />
@@ -28,6 +25,9 @@ const Routes = () => {
         <Route path="/basket" component={BasketPage} />
         <Route path="/login" component={Login} />
         <Route path="/register" component={Register} />
+        <RequireAuth>
+          <Route path="/checkout" component={CheckoutPage} />
+        </RequireAuth>
         <Route component={NotFound} />
       </Switch>
     </>

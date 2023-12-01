@@ -18,6 +18,8 @@ export default function Login() {
   const location = useLocation<{ from: string }>();
   const history = useHistory();
 
+  console.log(location.state?.from);
+
   const {
     register,
     handleSubmit,
@@ -26,7 +28,7 @@ export default function Login() {
 
   async function submitForm(data: FieldValues) {
     try {
-      dispatch(signInUser(data));
+      await dispatch(signInUser(data));
       history.push(location.state?.from || "/catalog");
     } catch (err) {
       console.error(err);

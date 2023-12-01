@@ -1,5 +1,5 @@
 import { PropsWithChildren } from "react";
-import { Redirect, useLocation } from "react-router-dom";
+import { Redirect, Switch, useLocation } from "react-router-dom";
 import { useAppSelector } from "src/app/store/configureStore";
 
 const RequireAuth = ({ children }: PropsWithChildren) => {
@@ -17,7 +17,7 @@ const RequireAuth = ({ children }: PropsWithChildren) => {
     );
   }
 
-  return <>{children}</>;
+  return <Switch>{children}</Switch>;
 };
 
 export default RequireAuth;
