@@ -18,8 +18,6 @@ export default function Login() {
   const location = useLocation<{ from: string }>();
   const history = useHistory();
 
-  console.log(location.state?.from);
-
   const {
     register,
     handleSubmit,

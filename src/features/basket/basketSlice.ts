@@ -45,7 +45,6 @@ export const fetchBasketAsync = createAsyncThunk<Basket>(
   },
   {
     condition: () => {
-      console.log(localStorage.getItem("buyerId"));
       if (!localStorage.getItem("buyerId")) return false;
     },
   }
